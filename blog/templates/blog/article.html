@@ -1,0 +1,47 @@
+{% extends "blog/base.html" %}
+{% load tjb %}
+
+{% block title %}{{ post.title }} · the japan bike{% endblock %}
+
+{% block content %}
+<article class="article">
+  <div class="article-top">
+    <a class="back-link" href="{% url 'blog:feed' %}">
+      {% include "blog/_icon.html" with name="arrowLeft" size=18 %}{{ T.back }}
+    </a>
+  </div>
+
+  <div class="post-meta" style="margin-bottom:4px">
+    <a class="tag" href="{% url 'blog:category' post.category %}">{{ post.category_label }}</a>
+  </div>
+  <h1 class="art-title">{{ post.title }}</h1>
+  <p class="art-sub">{{ post.sub }}</p>
+
+  <a class="art-byline" href="{{ post.author.get_absolute_url }}">
+    {% include "blog/_avatar.html" with text=post.author.avatar_text size=48 %}
+    <div>
+      <div class="who">{{ post.author.name }}</div>
+      <div class="when">{{ post.display_date }} · {{ post.read_time }} {{ T.read }}</div>
+    </div>
+  </a>
+
+  <div class="orig-tag">
+    <span class="pin">{% include "blog/_icon.html" with name="pin" size=18 %}</span>
+    {{ T.originally_written|fmt:orig_name }}{% if post.is_translation %}{{ T.viewing_translation }}{% endif %}
+  </div>
+
+  <div class="art-body">
+    {% if post.has_body %}
+      {% for b in post.body %}{% include "blog/_block.html" %}{% endfor %}
+    {% else %}
+      <p style="color:var(--ink-soft)">{{ T.coming_soon }}</p>
+    {% endif %}
+  </div>
+
+  <div class="art-footer-divider"></div>
+  <a class="art-more" href="{{ post.author.get_absolute_url }}">
+    {% include "blog/_avatar.html" with text=post.author.avatar_text size=42 %}
+    <span class="note">{{ T.more_from|fmt:post.author.name }}</span>
+  </a>
+</article>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% comment %} One Z-pattern feed row. Alternating sides handled in CSS (:nth-child). {% endcomment %}
+<article class="post-row">
+  <a class="post-media" href="{{ post.get_absolute_url }}">
+    {% if post.image %}
+      <img src="{{ post.image.url }}" alt="{{ post.title }}" loading="lazy" />
+    {% else %}
+      <div class="ph {{ post.media_shape }}"><div class="ph-label">{{ post.media_label }}</div></div>
+    {% endif %}
+  </a>
+  <div class="post-body">
+    <div class="post-meta">
+      <a class="tag" href="{% url 'blog:category' post.category %}">{{ post.category_label }}</a>
+      <span class="lang-chip">{{ post.orig_chip }}</span>
+    </div>
+    <h2 class="post-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+    <p class="post-sub">{{ post.sub }}</p>
+    <div class="post-meta">
+      <a href="{{ post.author.get_absolute_url }}" style="display:inline-flex;align-items:center;gap:12px">
+        {% include "blog/_avatar.html" with text=post.author.avatar_text size=42 %}
+        <span class="byline">{{ post.author.name }}</span>
+      </a>
+      <span class="dot-sep"></span>
+      <span>{{ post.display_date }}</span>
+      <span class="dot-sep"></span>
+      <span style="display:inline-flex;align-items:center;gap:5px">
+        {% include "blog/_icon.html" with name="clock" size=13 %}{{ post.read_time }}
+      </span>
+    </div>
+  </div>
+</article>

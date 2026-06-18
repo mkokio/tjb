@@ -1,0 +1,68 @@
+{% extends "blog/base.html" %}
+{% load tjb %}
+
+{% block title %}{{ author.name }} · the japan bike{% endblock %}
+
+{% block content %}
+<section class="profile-top">
+  <a class="back-link" href="{% url 'blog:feed' %}" style="display:inline-flex">
+    {% include "blog/_icon.html" with name="arrowLeft" size=18 %}{{ T.back }}
+  </a>
+</section>
+
+<section class="neo profile-card">
+  {% include "blog/_avatar.html" with text=author.avatar_text size=116 %}
+  <div>
+    <h1>{{ author.name }}</h1>
+    <div class="profile-role">
+      <span>{{ author.role }}</span>
+      <span class="dot-sep"></span>
+      <span class="loc">
+        <span style="color:var(--accent);display:inline-flex">{% include "blog/_icon.html" with name="pin" size=16 %}</span>{{ author.location }}
+      </span>
+    </div>
+  </div>
+
+  <p class="profile-bio">{{ author.bio }}</p>
+
+  <div class="profile-meta">
+    <span class="lang-chip">{{ author.writes_label }}</span>
+    <span class="since">{{ author.since }}</span>
+  </div>
+
+  <div class="profile-stats">
+    <div class="stat">
+      <span class="n">{{ story_count }}</span>
+      <span class="lbl">{% if LANG == 'ja' %}記事{% elif story_count == 1 %}{{ T.story }}{% else %}{{ T.stories }}{% endif %}</span>
+    </div>
+    <div class="stat">
+      <span class="n">{{ author.handle }}</span>
+      <span class="lbl">{{ T.handle }}</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-head">
+  <span class="hand">{{ T.stories_by|fmt:author.name }}</span>
+</div>
+<div class="feed" style="margin-top:0">
+  {% for post in posts %}
+    {% include "blog/_post_row.html" %}
+  {% endfor %}
+</div>
+
+<section class="contributors">
+  <div class="title">{{ T.other_contributors }}</div>
+  <div class="contributor-list">
+    {% for o in others %}
+      <a class="neo-sm neo-press contributor" href="{{ o.get_absolute_url }}">
+        <span class="mini-avatar">{{ o.avatar_text }}</span>
+        <span>
+          <span class="who">{{ o.name }}</span>
+          <span class="role">{{ o.role }}</span>
+        </span>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

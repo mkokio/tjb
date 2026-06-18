@@ -1,0 +1,51 @@
+{% comment %} Global sticky top bar. Mobile menu is a CSS-only checkbox toggle — no JS. {% endcomment %}
+<div class="topbar-wrap">
+  <input type="checkbox" id="menu-toggle" class="menu-toggle" tabindex="-1" aria-hidden="true">
+  <div class="topbar">
+    {# Brand cross-swaps: EN active shows the Japanese wordmark, and vice versa. #}
+    <a class="brand{% if LANG == 'en' %} brand--ja{% endif %}" href="{% url 'blog:feed' %}"
+       lang="{% if LANG == 'en' %}ja{% else %}en{% endif %}">
+      {% if LANG == 'en' %}
+        <span class="the">ザ</span><span>ジャパンバイク<span class="accent-dot">。</span></span>
+      {% else %}
+        <span class="the">the</span><span>japan bike<span class="accent-dot">.</span></span>
+      {% endif %}
+    </a>
+
+    <nav class="nav">
+      {% for c in NAV_CATEGORIES %}
+        <a href="{% url 'blog:category' c.slug %}"
+           class="{% if active_cat == c.slug %}active{% endif %}">{{ c.label }}</a>
+      {% endfor %}
+    </nav>
+
+    <div class="topbar-actions">
+      {% comment %} Search — disabled for now; re-enable once a search view is wired up.
+      <a class="icon-btn" href="{% url 'blog:feed' %}" title="{{ T.search }}" aria-label="{{ T.search }}">
+        {% include "blog/_icon.html" with name="search" %}
+      </a>
+      {% endcomment %}
+      <a class="write-btn" href="/admin/blog/post/add/" title="{{ T.write }}">
+        {% include "blog/_icon.html" with name="pen" size=17 %}
+        <!-- <span class="lbl">{{ T.write }}</span> -->
+      </a>
+      <a href="/admin/" title="{{ T.your_profile }}">
+        {% include "blog/_avatar.html" with text="マーク" size=42 %}
+      </a>
+      <label class="icon-btn hamburger" for="menu-toggle" title="{{ T.menu }}" aria-label="{{ T.menu }}">
+        <span class="ic-open">{% include "blog/_icon.html" with name="menu" %}</span>
+        <span class="ic-close">{% include "blog/_icon.html" with name="close" %}</span>
+      </label>
+      {% comment %} Language switch anchored to the far right so it never shifts
+      when other actions (e.g. the Write label) change width between languages. {% endcomment %}
+      {% include "blog/_langtoggle.html" with extra_class="langtoggle--nav" %}
+    </div>
+  </div>
+
+  <nav class="mobile-menu neo">
+    {% for c in NAV_CATEGORIES %}
+      <a href="{% url 'blog:category' c.slug %}"
+         class="{% if active_cat == c.slug %}active{% endif %}">{{ c.label }}</a>
+    {% endfor %}
+  </nav>
+</div>

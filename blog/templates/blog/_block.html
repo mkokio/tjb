@@ -1,0 +1,14 @@
+{% comment %} Renders one typed content block `b`. See Post.body_* in models.py. {% endcomment %}{% if b.t == "p" %}
+  <p>{{ b.x }}</p>
+{% elif b.t == "quote" %}
+  <blockquote class="pullquote">{{ b.x }}</blockquote>
+{% elif b.t == "img" %}
+  <figure>
+    <div class="ph wide"><div class="ph-label">{{ b.label }}</div></div>
+    <figcaption>{{ b.cap }}</figcaption>
+  </figure>
+{% elif b.t == "code" %}
+  <pre class="codeblock"><code>{{ b.x }}</code></pre>
+{% elif b.t == "ol" %}
+  <ol>{% for it in b.items %}<li>{{ it }}</li>{% endfor %}</ol>
+{% endif %}

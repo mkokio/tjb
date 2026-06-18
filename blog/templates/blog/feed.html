@@ -1,0 +1,21 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+  {% include "blog/_masthead.html" %}
+
+  {% if active_cat %}
+    <div class="cat-head">
+      <span class="hand">{{ active_cat_label }}</span>
+      <span class="count">{{ posts|length }} {% if posts|length == 1 %}{{ T.story }}{% else %}{{ T.stories }}{% endif %}</span>
+      <a class="show-all" href="{% url 'blog:feed' %}">
+        {% include "blog/_icon.html" with name="close" size=14 %}{{ T.show_all }}
+      </a>
+    </div>
+  {% endif %}
+
+  <div class="feed">
+    {% for post in posts %}
+      {% include "blog/_post_row.html" %}
+    {% endfor %}
+  </div>
+{% endblock %}

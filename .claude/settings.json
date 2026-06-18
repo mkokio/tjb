@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m django --version)",
+      "Bash(pip3 --version)",
+      "Bash(python3 -m venv venv)",
+      "Bash(./venv/bin/pip install *)",
+      "Bash(./venv/bin/python -m django --version)",
+      "Bash(./venv/bin/django-admin startproject *)",
+      "Bash(./venv/bin/python manage.py startapp blog)",
+      "Bash(./venv/bin/python manage.py makemigrations blog)",
+      "Bash(./venv/bin/python manage.py migrate)",
+      "Bash(./venv/bin/python manage.py seed_demo)",
+      "Bash(./venv/bin/python manage.py check)",
+      "Bash(./venv/bin/python manage.py runserver 8765)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:8765/)",
+      "Bash(curl -s http://127.0.0.1:8765/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:8765/a/shizuoka-trails/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:8765/u/marc/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:8765/c/bikes/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://127.0.0.1:8765/c/nope/)",
+      "Bash(curl -s http://127.0.0.1:8765/a/shizuoka-trails/)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -s -o /dev/null -w \"code=%{http_code} loc=%{redirect_url}\\\\n\" \"http://127.0.0.1:8765/lang/?lang=ja&next=/\")",
+      "Bash(curl -s --cookie \"tjb_lang=ja\" http://127.0.0.1:8765/)",
+      "Bash(curl -s --cookie \"tjb_lang=ja\" http://127.0.0.1:8765/a/shizuoka-trails/)",
+      "Bash([ -f \"$CHROME\" ])",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1280,1400 --screenshot=/tmp/tjb_feed_en.png http://127.0.0.1:8765/)",
+      "Read(//tmp/**)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1280,1500 --screenshot=/tmp/tjb_article.png http://127.0.0.1:8765/a/shizuoka-trails/)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=430,1400 --screenshot=/tmp/tjb_mobile.png http://127.0.0.1:8765/)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1280,1500 --screenshot=/tmp/tjb_profile.png http://127.0.0.1:8765/u/koyna/)",
+      "Bash(DJANGO_SUPERUSER_PASSWORD=admin ./venv/bin/python manage.py createsuperuser --noinput --username admin --email admin@example.com)",
+      "Bash(./venv/bin/pip freeze *)",
+      "Bash(pkill -f \"manage.py runserver\")",
+      "Bash(./venv/bin/python manage.py runserver 8765 > /tmp/tjb_server.log 2>&1 & *)"
+    ],
+    "additionalDirectories": [
+      "/private/tmp"
+    ]
+  }
+}

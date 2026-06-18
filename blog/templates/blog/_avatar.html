@@ -1,0 +1,4 @@
+{% load tjb %}{% comment %}
+Circular avatar with handwritten initials. Usage:
+{% include "blog/_avatar.html" with text=author.avatar_text size=42 %}
+{% endcomment %}<span class="avatar {{ extra_class }}" style="{% avatar_style text size|default:42 %}">{{ text }}</span>

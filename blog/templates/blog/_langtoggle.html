@@ -1,0 +1,24 @@
+{% comment %}
+The single, site-wide EN / 日本語 language switch. POSTs to set_language
+(Django i18n convention); the whole page re-renders server-side — no JS, no SPA.
+Two monocolor icon buttons (maple leaf / rising-sun flag) themed to --ink /
+--ink-soft via currentColor. The active option is raised; the inactive dimmed.
+{% endcomment %}<form action="{% url 'blog:set_language' %}" method="post" class="langtoggle {{ extra_class }}" role="group" aria-label="{{ T.language }}">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+  <button type="submit" name="language" value="en"
+          class="lang-icon {% if LANG == 'en' %}on{% endif %}"
+          aria-label="English" title="English"{% if LANG == 'en' %} aria-current="true"{% endif %}>
+    <svg width="17" height="17" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
+      <path d="M383.8 351.7c2.5-2.5 105.2-92.4 105.2-92.4l-17.5-7.5c-10-4.9-7.4-11.5-5-17.4 2.4-6 20-49.9 20-49.9s-46.3 9.9-56.2 12.4c-7.5 2.4-10-2.5-12.5-7.5s-15-32.4-15-32.4-52.4 59.9-54.9 62.3c-10 7.5-20 0-17.5-10 0-10 27.5-126.8 27.5-126.8s-30 17.4-40 22.4c-7.5 5-12.5 5-17.5-5C272.3 72.3 252.3 32 252.3 32s-20 40.3-27.5 57.4c-5 10-10 10-17.5 5-10-5-40-22.4-40-22.4S195.1 194.3 195.1 204.3c2.5 10-7.5 17.5-17.5 10-2.5-2.5-54.9-62.3-54.9-62.3S109.3 184.8 106.8 189.8s-5 9.9-12.5 7.5C84.4 194.8 38 184.9 38 184.9s17.6 43.9 20 49.9c2.5 5.9 5 12.5-5 17.4L35.6 259.3s102.6 89.9 105.1 92.4c5.1 5 10 7.5 5.1 22.5-5.1 15-10.1 35.3-10.1 35.3s95.2-20.3 105.1-22.8c8.7-1.6 18.4 2.5 18.4 12.5S252.3 480 252.3 480h20s-1.4-67.9-1.4-77.9c0-10.1 9.6-14.1 18.4-12.5 9.9 2.5 105.1 22.8 105.1 22.8s-5-20.3-10.1-35.3 0-17.5 5.1-22.5z"/>
+    </svg>
+  </button>
+  <button type="submit" name="language" value="ja"
+          class="lang-icon {% if LANG == 'ja' %}on{% endif %}"
+          aria-label="日本語" title="日本語"{% if LANG == 'ja' %} aria-current="true"{% endif %}>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="5.5" width="19" height="13" rx="1.6" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="12" cy="12" r="3.3" fill="currentColor"/>
+    </svg>
+  </button>
+</form>
