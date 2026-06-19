@@ -198,3 +198,29 @@ class Post(models.Model):
     @property
     def has_body(self):
         return bool(self.body)
+
+    # ---- machine translation (admin-only; see blog/translation.py) -----------
+    def _other_lang(self):
+        return "ja" if self.orig == "en" else "en"
+
+    def translation_is_empty(self):
+        """True if the non-original language has no content yet."""
+        t = self._other_lang()
+        return not (getattr(self, f"title_{t}") or getattr(self, f"sub_{t}")
+                    or getattr(self, f"body_{t}"))
+
+    def machine_translate(self):
+        """Fill the non-original language fields from the original via MT.
+
+        Overwrites the target side — callers decide *when* this runs (on create,
+        or via the explicit admin button/action), so a human translation is only
+        ever replaced when you ask for it.
+        """
+        from .translation import make_translator, translate_text, translate_blocks
+        src, tgt = self.orig, self._other_lang()
+        tr = make_translator(src, tgt)
+        title_max = self._meta.get_field(f"title_{tgt}").max_length
+        sub_max = self._meta.get_field(f"sub_{tgt}").max_length
+        setattr(self, f"title_{tgt}", translate_text(tr, getattr(self, f"title_{src}"))[:title_max])
+        setattr(self, f"sub_{tgt}", translate_text(tr, getattr(self, f"sub_{src}"))[:sub_max])
+        setattr(self, f"body_{tgt}", translate_blocks(tr, getattr(self, f"body_{src}")))

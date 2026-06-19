@@ -63,6 +63,37 @@ language versions plus a JSON body of typed blocks (`p`, `quote`, `img`, `ol`,
 styling. Real photography uploads via the `image` field; absent that, a striped
 placeholder labelled `media_label` is shown.
 
+### Machine translation
+Write a post in its original language and leave the other language blank — on
+**create**, the empty side is machine-translated and stored (title, subtitle,
+and body blocks; `code` blocks are left untouched). Filling both languages by
+hand on creation skips translation and keeps what you wrote.
+
+**Editing never auto-translates**, so a human translator's work is never
+clobbered. To deliberately refresh the machine translation after revising the
+original, use either the **"Save and auto-translate the other language"** button
+in the post editor, or the **"Auto-translate the other language…"** bulk action
+on the post list (both overwrite the other side from the original).
+
+All of this runs **server-side in the admin** ([`blog/translation.py`](blog/translation.py))
+and is written to the DB, so the public site makes **no** translation calls and
+stays zero-JS — readers only ever get the stored text. Failures are caught: the
+post still saves and you get a warning to retry.
+
+The default backend is `deep-translator` → Google (free, no API key, but an
+unofficial endpoint that can rate-limit). **Swapping providers is one line** in
+`make_translator()` — e.g. for DeepL's free tier (best EN↔JA quality, needs a
+free key):
+
+```python
+# blog/translation.py
+from deep_translator import DeeplTranslator   # instead of GoogleTranslator
+
+def make_translator(source, target):
+    return DeeplTranslator(api_key="…", source=source, target=target)
+    # other drop-in options: MyMemoryTranslator (no key) · LibreTranslator (self-host)
+```
+
 ## Project layout
 ```
 thejapanbike/settings.py   # sqlite, cookie language, static/media
@@ -70,7 +101,8 @@ blog/
   models.py                # Author, Post, Category (fixed enum), body blocks
   views.py                 # feed, article, profile, category, set_language
   i18n.py                  # UI strings + language middleware + context processor
-  admin.py                 # bilingual authoring
+  translation.py           # admin-only machine translation (deep-translator)
+  admin.py                 # bilingual authoring + auto-translate button/action
   templatetags/tjb.py      # {x} string interpolation, avatar sizing
   templates/blog/          # base + partials + feed/article/profile pages
   static/blog/site.css     # the design system (lifted from the prototype)

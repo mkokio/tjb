@@ -1,0 +1,13 @@
+{% extends "admin/change_form.html" %}
+{% comment %}
+Adds a "Save and auto-translate the other language" button to the post editor.
+Submitting it saves the form, then machine-translates the original language into
+the other one (overwriting it). Handled in PostAdmin.response_change / response_add.
+{% endcomment %}
+{% block submit_buttons_bottom %}
+  {{ block.super }}
+  <div class="submit-row">
+    <input type="submit" name="_autotranslate"
+           value="Save and auto-translate the other language">
+  </div>
+{% endblock %}

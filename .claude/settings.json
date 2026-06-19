@@ -33,7 +33,10 @@
       "Bash(DJANGO_SUPERUSER_PASSWORD=admin ./venv/bin/python manage.py createsuperuser --noinput --username admin --email admin@example.com)",
       "Bash(./venv/bin/pip freeze *)",
       "Bash(pkill -f \"manage.py runserver\")",
-      "Bash(./venv/bin/python manage.py runserver 8765 > /tmp/tjb_server.log 2>&1 & *)"
+      "Bash(./venv/bin/python manage.py runserver 8765 > /tmp/tjb_server.log 2>&1 & *)",
+      "Bash(./venv/bin/python -c \"import deep_translator; print\\('deep-translator', deep_translator.__version__ if hasattr\\(deep_translator,'__version__'\\) else 'ok'\\)\")",
+      "Bash(./venv/bin/python -c ' *)",
+      "Bash(./venv/bin/python manage.py shell -c ' *)"
     ],
     "additionalDirectories": [
       "/private/tmp"
