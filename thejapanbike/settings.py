@@ -9,23 +9,24 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+CSRF_TRUSTED_ORIGINS = ['https://thejapanbike.com', 'https://www.thejapanbike.com', 'https://thejapanbike.fly.dev']
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#ntpl-efi-pqphi4__#4h5bbo^ow(($l_o!uv7*a_eo*99njk@'
+# SECRET_KEY = 'django-insecure-#ntpl-efi-pqphi4__#4h5bbo^ow(($l_o!uv7*a_eo*99njk@'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-#ntpl-efi-pqphi4__#4h5bbo^ow(($l_o!uv7*a_eo*99njk@')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['thejapanbike.com', 'www.thejapanbike.com', 'thejapanbike.fly.dev']
 
 
 # Application definition
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -79,7 +81,7 @@ WSGI_APPLICATION = 'thejapanbike.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': '/data/db.sqlite3',
     }
 }
 
@@ -135,10 +137,11 @@ STATIC_URL = 'static/'
 # Collected/served from the blog app's static/ dir in dev; set a target for
 # `collectstatic` so deploying behind a real web server stays a one-liner.
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media (uploaded post/author imagery via ImageField)
 MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = '/data/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
