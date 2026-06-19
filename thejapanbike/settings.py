@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'blog',
 ]
 
@@ -75,15 +76,39 @@ TEMPLATES = [
 WSGI_APPLICATION = 'thejapanbike.wsgi.application'
 
 # Tigris / S3 media storage
+# Storage backends
 if os.environ.get('BUCKET_NAME'):
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    AWS_STORAGE_BUCKET_NAME = os.environ['BUCKET_NAME']
-    AWS_S3_ENDPOINT_URL = os.environ['AWS_ENDPOINT_URL_S3']
-    AWS_S3_REGION_NAME = os.environ.get('AWS_REGION', 'auto')
-    AWS_DEFAULT_ACL = 'public-read'
-    AWS_S3_FILE_OVERWRITE = False
-    MEDIA_URL = f'https://fly.storage.tigris.dev/{AWS_STORAGE_BUCKET_NAME}/'
-    
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "bucket_name": os.environ['BUCKET_NAME'],
+                "endpoint_url": os.environ['AWS_ENDPOINT_URL_S3'],
+                "region_name": os.environ.get('AWS_REGION', 'auto'),
+                "default_acl": "public-read",
+                "file_overwrite": False,
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    MEDIA_URL = f'https://fly.storage.tigris.dev/{os.environ["BUCKET_NAME"]}/'
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = '/data/media'
+
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -141,16 +166,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 
 # Collected/served from the blog app's static/ dir in dev; set a target for
 # `collectstatic` so deploying behind a real web server stays a one-liner.
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media (uploaded post/author imagery via ImageField)
-MEDIA_URL = 'media/'
-MEDIA_ROOT = '/data/media'
+# MEDIA_URL = 'media/'
+# MEDIA_ROOT = '/data/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
