@@ -74,7 +74,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'thejapanbike.wsgi.application'
 
-
+# Tigris / S3 media storage
+if os.environ.get('BUCKET_NAME'):
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_STORAGE_BUCKET_NAME = os.environ['BUCKET_NAME']
+    AWS_S3_ENDPOINT_URL = os.environ['AWS_ENDPOINT_URL_S3']
+    AWS_S3_REGION_NAME = os.environ.get('AWS_REGION', 'auto')
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_FILE_OVERWRITE = False
+    MEDIA_URL = f'https://fly.storage.tigris.dev/{AWS_STORAGE_BUCKET_NAME}/'
+    
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
