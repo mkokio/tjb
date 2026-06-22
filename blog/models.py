@@ -117,7 +117,6 @@ class Post(models.Model):
     category = models.CharField(max_length=20, choices=Category.choices)
     author = models.ForeignKey(Author, on_delete=models.PROTECT, related_name="posts")
     date = models.DateField()
-    read_time = models.CharField(max_length=20, default="5 min", help_text="e.g. '9 min'")
     orig = models.CharField(
         max_length=2, choices=LangChoices.choices, default=LangChoices.EN,
         help_text="The language this story was originally written in.",

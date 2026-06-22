@@ -1,9 +1,17 @@
 from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
-
+from django import forms
+from .widgets import BlockEditorWidget
 from .models import Author, Post
 
-
+class PostAdminForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = '__all__'
+        widgets = {
+            'body_en': BlockEditorWidget(),
+            'body_ja': BlockEditorWidget(),
+        }
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ("name", "handle", "writes")
@@ -17,6 +25,7 @@ class AuthorAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
+    form = PostAdminForm
     list_display = ("__str__", "category", "author", "date", "orig", "published")
     list_filter = ("category", "published", "orig", "author")
     date_hierarchy = "date"
@@ -25,7 +34,7 @@ class PostAdmin(admin.ModelAdmin):
     actions = ["autotranslate_action"]
     fieldsets = (
         (None, {
-            "fields": ("slug", "category", "author", "date", "read_time", "orig", "published"),
+            "fields": ("slug", "category", "author", "date", "orig", "published"),
             "description": (
                 "Write in the post's original language below. On <b>create</b>, if the "
                 "other language is left blank it's machine-translated automatically. "
